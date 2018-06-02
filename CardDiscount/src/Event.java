@@ -1,7 +1,7 @@
 
 public class Event {
-	String eventName;
+	String name;
 	String startDate;
-	String enddate;
+	String endDate;
 
 }
