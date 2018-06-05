@@ -12,16 +12,16 @@ public class DBConnection {
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/card_db?useSSL=false", "card_manager", "card7877");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/DB?useSSL=false", "root", "root12");
 			st = con.createStatement();
 			
 			String sql;
-			sql = "SELECT * FROM card";
+			sql = "SELECT * FROM user_db";
 			ResultSet rs = st.executeQuery(sql);
 			
 			while(rs.next()) {
-				String name = rs.getString("name");
-				String company = rs.getString("company");
+				String name = rs.getString("id");
+				String company = rs.getString("pw");
 				System.out.println("Name : "+ name + "\ncompany : "+company+ "\n");
 			}
 			
