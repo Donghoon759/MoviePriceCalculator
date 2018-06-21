@@ -1,9 +1,11 @@
 package database;
 
 import java.sql.*;
+
+import java.util.*;
+
 import java.text.SimpleDateFormat;
 import java.sql.Timestamp;
-import java.util.Calendar;
 
 import javax.print.DocFlavor.STRING;
 
@@ -14,6 +16,9 @@ public class DBConnection {
 	Statement stt = null;
 	ResultSet rs;
 	String sql;
+
+	Event[] eventsInProgress = new Event[10];
+	CardPopularity[] popularity = new CardPopularity[10];
 
 	public DBConnection() {
 		try {
@@ -79,8 +84,7 @@ public class DBConnection {
 			System.out.println("이미 존재하는 아이디입니다.\n");
 		} else {
 			try {
-				if(id.equalsIgnoreCase("")||pw.equalsIgnoreCase(""))
-				{
+				if (id.equalsIgnoreCase("") || pw.equalsIgnoreCase("")) {
 					System.out.println("ID 또는 PW가 공백입니다.");
 					return false;
 				}
@@ -160,11 +164,11 @@ public class DBConnection {
 				System.out.println(now);
 
 				if (now.after(dbstartdate) && now.before(dbenddate)) {
-					String sqll = "update event_db set isOn = 1 where name = \'" + dbname+"\'";
+					String sqll = "update event_db set isOn = 1 where name = \'" + dbname + "\'";
 					stt.executeUpdate(sqll);
 					System.out.println("진행중\n");
 				} else {
-					String sqll = "update event_db set isOn = 0 where name = \'" + dbname+"\'";
+					String sqll = "update event_db set isOn = 0 where name = \'" + dbname + "\'";
 					stt.executeUpdate(sqll);
 					System.out.println("끝\n");
 				}
@@ -180,13 +184,19 @@ public class DBConnection {
 			sql = "SELECT * FROM event_db";
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			ResultSet rs = st.executeQuery(sql);
+			int i = 0;
 			while (rs.next()) {
 				String dbname = rs.getString("name");
 				Timestamp dbstartdate = rs.getTimestamp("startdate");
 				Timestamp dbenddate = rs.getTimestamp("enddate");
+				String dbcompany = rs.getString("company");
 				int dbisOn = rs.getInt("isOn");
-				if (rs.getInt("isOn") == 1)
-					System.out.println("카드이름 : " + dbname + " 시작날짜 : " + dbstartdate + " 끝날짜 : " + dbenddate+"\n");
+
+				if (rs.getInt("isOn") == 1) {
+					System.out.println("카드이름 : " + dbname + " 시작날짜 : " + dbstartdate + " 끝날짜 : " + dbenddate + " 회사 : "
+							+ dbcompany + "\n");
+					eventsInProgress[i++] = new Event(dbname, dbstartdate, dbenddate, dbcompany, dbisOn);
+				}
 			}
 		} catch (Exception e) {
 			System.out.println("데이터베이스 연결 오류 : " + e.getMessage());
@@ -196,14 +206,14 @@ public class DBConnection {
 
 	public void checkEventsByCardCompany(String company) {
 		try {
-			sql = "SELECT * FROM event_db where company = \'" + company+"\'";
+			sql = "SELECT * FROM event_db where company = \'" + company + "\'";
 			ResultSet rs = st.executeQuery(sql);
 			while (rs.next()) {
 				String dbname = rs.getString("name");
 				Timestamp dbstartdate = rs.getTimestamp("startdate");
 				Timestamp dbenddate = rs.getTimestamp("enddate");
 				System.out.print("카드이름 : " + dbname + " 시작날짜 : " + dbstartdate + " 끝날짜 : " + dbenddate);
-				if(rs.getInt("isOn")==1)
+				if (rs.getInt("isOn") == 1)
 					System.out.println(" 진행중");
 				else
 					System.out.println("지난이벤트");
@@ -218,17 +228,19 @@ public class DBConnection {
 	public void checkCardPopularity() {
 		try {
 			int count = 1;
+			int i = 0;
 			sql = "SELECT * FROM cardpopularity_db ORDER BY popularity DESC";
 			ResultSet rs = st.executeQuery(sql);
 			while (rs.next() && (count <= 3)) {
 				String dbname = rs.getString("popularcard");
-				System.out.println("인기 있는 카드 : "+dbname);
+				int dbpopularity = rs.getInt("popularity");
+				System.out.println("인기 있는 카드 : " + dbname + " 인기도 : " + dbpopularity);
+				popularity[i++] = new CardPopularity(dbname, dbpopularity);
 				count++;
 			}
 		} catch (Exception e) {
 			System.out.println("데이터베이스 연결 오류 : " + e.getMessage());
 		}
 	}
-	
 
 }

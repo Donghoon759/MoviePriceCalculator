@@ -1,7 +1,9 @@
 package database;
 
+import java.awt.Button;
 import java.awt.Choice;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Panel;
@@ -44,9 +46,10 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 	private ImageIcon LoginVerifiedBasicImage = new ImageIcon(Main.class.getResource("/Images/LoginBtn_01.png"));
 	private ImageIcon LoginVerifiedEnteredImage = new ImageIcon(Main.class.getResource("/Images/LoginBtn_02.png"));
 
-//	private ImageIcon RegisterVerifiedBasicImage = new ImageIcon(Main.class.getResource("/Images/RegisterBtn.png"));
-//	private ImageIcon RegisterVerifiedEnteredImage = new ImageIcon(
-//			Main.class.getResource("/Images/RegisterBtn_01.png"));
+	// private ImageIcon RegisterVerifiedBasicImage = new
+	// ImageIcon(Main.class.getResource("/Images/RegisterBtn.png"));
+	// private ImageIcon RegisterVerifiedEnteredImage = new ImageIcon(
+	// Main.class.getResource("/Images/RegisterBtn_01.png"));
 
 	private ImageIcon BackButtonBasicImage = new ImageIcon(Main.class.getResource("/Images/BackBtn_01.png"));
 	private ImageIcon BackButtonEnteredImage = new ImageIcon(Main.class.getResource("/Images/BackBtn_02.png"));
@@ -84,12 +87,16 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 	private JButton MovieCalculateButton = new JButton(MovieCalculateBasicImage);
 	private JButton LoginButton = new JButton(LoginButtonBasicImage);
 	private JButton LoginVerifiedButton = new JButton(LoginVerifiedBasicImage);
-//	private JButton RegisterVerifiedButton = new JButton(LoginVerifiedBasicImage);
+	// private JButton RegisterVerifiedButton = new
+	// JButton(LoginVerifiedBasicImage);
 	private JButton BackButton = new JButton(BackButtonBasicImage);
+	private JButton Back2Button = new JButton(BackButtonBasicImage);
 	private JButton RegisterButton = new JButton(RegisterButtonBasicImage);
 	private JButton NowButton = new JButton(NowButtonBasicImage);
 	private JButton PopularityButton = new JButton(PopularityBtnBasicImage);
 	private JButton RgstButton = new JButton(RgstButtonBasicImage);
+	private JButton[] pbtn = new JButton[3];
+	private JButton[] btn = new JButton[100];
 	//////////////////////////////////////////////////
 	private boolean isLoginScreen = false;
 	private boolean isLoginVerified = false;
@@ -98,9 +105,11 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 	private boolean isCalculateButton = false;
 	private boolean isRegisterButton = false;
 	private boolean isRgstButton = false;
+	private boolean isNowButton = false;
 
 	///////////////////////////////////
 	private int mouseX, mouseY;
+	private int leng = 0;
 
 	public DynamicBeat() {
 
@@ -168,10 +177,13 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 
 				////////// 이때 이미지를 바꿔버리는 코드이다. //////
 				isCalculateButton = true;
-				cCount = 1;
+
 				background = new ImageIcon(Main.class.getResource("/Images/PriceScreen.png")).getImage();
 				// 위에 PriceScreen 으로 바뀌어있는지 확인
 				LoginButton.setVisible(false);
+				add(Back2Button);
+				Back2Button.setVisible(true);
+				cCount = 1;
 				// 게임시작 이벤트
 			}
 		});
@@ -339,6 +351,47 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 			}
 		});
 
+		/////////////// Back2Button ////////////
+		Back2Button.setBounds(1166, 31, 111, 38);
+		/////////////////////// 네모모양이 아니고 bound를 없애주는 함수 /////////
+		Back2Button.setBorderPainted(false);
+		Back2Button.setContentAreaFilled(false);
+		Back2Button.setFocusPainted(false);
+		///////////////////////////////////////
+		Back2Button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				Back2Button.setIcon(BackButtonEnteredImage);
+			}
+
+			public void mouseExited(MouseEvent e) {
+				Back2Button.setIcon(BackButtonBasicImage);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				///////// 시작버튼이 안보이게 하는거?
+//				count = 0;
+
+				Back2Button.setVisible(false);
+				isBackButton = true;
+				isPopularButton = false;
+				isLoginVerified = false;
+				isLoginScreen = false;
+				isCalculateButton = false;
+				isRegisterButton = false;
+				isRgstButton = false;
+				isNowButton = false;
+				////////// 이때 이미지를 바꿔버리는 코드이다. //////
+				// background = new
+				////////// ImageIcon(Main.class.getResource("/Images/buttonbackground.png")).getImage();
+
+				///////// 추후 backMain()으로 만들어야 한다. ////////////////////
+
+				// 메인화면으로 돌아가는 이벤트
+			}
+		});
+
 		/////////////// NowButtonBasicImage ////////////
 		NowButton.setBounds(0, 200, 307, 160);
 		/////////////////////// 네모모양이 아니고 bound를 없애주는 함수 /////////
@@ -359,14 +412,18 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				///////// 시작버튼이 안보이게 하는거?
+				isNowButton = true;
 				NowButton.setVisible(false);
 				LoginButton.setVisible(false);
 				MovieCalculateButton.setVisible(false);
 				RegisterButton.setVisible(false);
 				PopularityButton.setVisible(false);
 				////////// 이때 이미지를 바꿔버리는 코드이다. //////
-				background = new ImageIcon(Main.class.getResource("/Images/buttonbackground.png")).getImage();
+				background = new ImageIcon(Main.class.getResource("/Images/NowScreen.png")).getImage();
 				LoginButton.setVisible(false);
+				count = 0;
+				add(Back2Button);
+				Back2Button.setVisible(true);
 				// 게임시작 이벤트
 			}
 		});
@@ -407,7 +464,7 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 				// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★//
 				////////// 이때 이미지를 바꿔버리는 코드이다. //////
 				background = new ImageIcon(Main.class.getResource("/Images/RgstScreen.png")).getImage();
-				 RgstButton.setVisible(true);
+				RgstButton.setVisible(true);
 				BackButton.setVisible(true);
 				LoginButton.setVisible(false);
 				// 게임시작 이벤트
@@ -444,11 +501,13 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 				LoginButton.setVisible(false);
 
 				////////// 이때 이미지를 바꿔버리는 코드이다. //////
-				background = new ImageIcon(Main.class.getResource("/Images/ReadyBG.png")).getImage();
+				background = new ImageIcon(Main.class.getResource("/Images/PopScreen.png")).getImage();
 				LoginButton.setVisible(false);
 				isPopularButton = true;
-				count = 1;
+				count = 0;
 				// 게임시작 이벤트
+				add(Back2Button);
+				Back2Button.setVisible(true);
 			}
 		});
 		add(PopularityButton);
@@ -478,7 +537,7 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 				RegisterButton.setVisible(false);
 				NowButton.setVisible(false);
 				LoginButton.setVisible(false);
-//				RgstButton.setVisible(true);
+				// RgstButton.setVisible(true);
 				isRgstButton = true;
 				rgCount = 1;
 				////////// 이때 이미지를 바꿔버리는 코드이다. //////
@@ -517,11 +576,11 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 		screenGraphic = screenImage.getGraphics(); //
 		screenDraw(screenGraphic); // 이 그래픽에 어떠한 그림을 그려주는것.
 		g.drawImage(screenImage, 0, 0, null); // 0.0의 위치에 그려주는것.
-//		System.out.println("paint호출");
+		// System.out.println("paint호출");
 	}
 
 	public void screenDraw(Graphics g) {
-//		System.out.println("screenDraw호출");
+		// System.out.println("screenDraw호출");
 		//////////////// drawImage는 screenImage라는 변수안에 background같은 Image를
 		//////////////// 그려주는 것이다.
 		g.drawImage(background, 0, 0, null);
@@ -530,31 +589,31 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 		paintComponents(g); // 고정된 이미지, 움직이는게 아닌 것은 여기서 그린다.
 		////////////////////////////////////
 
-//		if (isLoginScreen && (count == 0)) {
-//			// Login();
-//			TF = new JTextField(20);
-//			TF2 = new JPasswordField(20);
-//			TF.setBounds(500, 330, 270, 30);
-//			TF2.setBounds(500, 430, 270, 30);
-//			TF2.setVisible(true);
-//			TF.setVisible(true);
-//			TF.setOpaque(true);
-//			TF2.setOpaque(true);
-//
-//			this.add(TF);
-//			this.add(TF2);
-//
-//			add(LoginVerifiedButton);
-//			add(BackButton);
-//			this.revalidate();
-//			this.repaint();
-//			count = 1;
-//		}
-		
-		if (isLoginScreen&&(count==0)) {
+		// if (isLoginScreen && (count == 0)) {
+		// // Login();
+		// TF = new JTextField(20);
+		// TF2 = new JPasswordField(20);
+		// TF.setBounds(500, 330, 270, 30);
+		// TF2.setBounds(500, 430, 270, 30);
+		// TF2.setVisible(true);
+		// TF.setVisible(true);
+		// TF.setOpaque(true);
+		// TF2.setOpaque(true);
+		//
+		// this.add(TF);
+		// this.add(TF2);
+		//
+		// add(LoginVerifiedButton);
+		// add(BackButton);
+		// this.revalidate();
+		// this.repaint();
+		// count = 1;
+		// }
+
+		if (isLoginScreen && (count == 0)) {
 			// Login();
-//			TF = new JTextField(20);
-//			TF2 = new JPasswordField(20);
+			// TF = new JTextField(20);
+			// TF2 = new JPasswordField(20);
 			TF.setBounds(500, 330, 270, 30);
 			TF2.setBounds(500, 430, 270, 30);
 			TF2.setVisible(true);
@@ -571,7 +630,60 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 			count = 1;
 			// this.repaint();
 		}
-		
+
+		if (isNowButton && (count == 0)) {
+			leng=0;
+			count = 1;
+			isNowButton = false;
+
+			connection.checkEventsInProgress();
+			int num = connection.eventsInProgress.length;
+
+			for (int j = 0; j < num; j++) {
+				if (connection.eventsInProgress[j] != null)
+					leng++;
+				else
+					break;
+			}
+			System.out.println(leng);
+
+			
+			int j=0;
+
+			for (int i = 0; i < leng; i++) {
+				btn[j++] = new JButton(connection.eventsInProgress[i].name);
+				btn[j++] = new JButton(connection.eventsInProgress[i].startDate.toString());
+				btn[j++] = new JButton(connection.eventsInProgress[i].endDate.toString());
+				btn[j++] = new JButton(connection.eventsInProgress[i].company);
+			}
+
+			for (int k = 0, plus = 0; k < leng*4; k += 4, plus += 80) {
+
+				btn[k].setBounds(108, 180 + plus, 200, 50);
+				btn[k + 1].setBounds(321, 180 + plus, 400, 50);
+				btn[k + 2].setBounds(658, 180 + plus, 400, 50);
+				btn[k + 3].setBounds(1000, 180 + plus, 200, 50);
+//				btn[k + 4].setBounds(1022, 180 + plus, 100, 50);
+				System.out.println(plus);
+				// plus += 42;
+			}
+
+			for (int i = 0; i < leng* 4; i++) {
+				btn[i].setForeground(Color.WHITE);
+				btn[i].setFont(new Font("a옛날사진관2", Font.BOLD, 20));
+				btn[i].setVisible(true);
+				btn[i].setOpaque(false);
+				btn[i].setBorderPainted(false);
+				btn[i].setContentAreaFilled(false);
+				btn[i].setFocusPainted(false);
+				add(btn[i]);
+				System.out.println("btn"+i+"added");
+			}
+			
+			count = 1;
+
+		}
+
 		if (isLoginVerified) {
 			// LoginVerified();
 			if (isLoginVerified) {
@@ -599,20 +711,57 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 			backMain();
 		}
 
-		if (isPopularButton && (count == 1)) {
+		if (isPopularButton && (count == 0)) {
+			/// 진행중인 이벤트 설정
+			connection.checkCardPopularity();
+			int num = connection.popularity.length;
+			int leng = 0;
+			for (int j = 0; j < 3; j++) {
+				if (connection.popularity[j] != null)
+					leng++;
+				else
+					break;
+			}
+			System.out.println(num);
+			for (int i = 0; i < leng; i++) {
+				PopularList.addItem(connection.popularity[i].popularcard);
+				System.out.println(connection.popularity[i].popularcard);
+			}
 
-			PopularList.addItem("7년의밤");
-			PopularList.addItem("택시운전사");
-			PopularList.addItem("아몰라");
-			System.out.println("여까지 들어왔냐  " + isPopularButton);
-			PopularList.setBounds(500, 400, 200, 30);
-			PopularList.setEditable(false);
-			PopularList.addActionListener(this);
-			PopularList.addItemListener(this);
+			pbtn[0] = new JButton(connection.popularity[0].popularcard);
+			pbtn[1] = new JButton(connection.popularity[1].popularcard);
+			pbtn[2] = new JButton(connection.popularity[2].popularcard);
 
-			add(PopularList);
-			count = 0;
-			PopularList.setVisible(true);
+			pbtn[0].setBounds(158, 177, 200, 50);
+			pbtn[1].setBounds(158, 338, 200, 50);
+			pbtn[2].setBounds(158, 494, 200, 50);
+
+			for (int i = 0; i < 3; i++) {
+				pbtn[i].setForeground(Color.WHITE);
+				pbtn[i].setFont(new Font("a옛날사진관2", Font.BOLD, 30));
+				pbtn[i].setVisible(true);
+				pbtn[i].setOpaque(false);
+				pbtn[i].setBorderPainted(false);
+				pbtn[i].setContentAreaFilled(false);
+				pbtn[i].setFocusPainted(false);
+
+			}
+
+			// PopularList.addItem("7년의밤");
+			// PopularList.addItem("택시운전사");
+			// PopularList.addItem("아몰라");
+			// System.out.println("여까지 들어왔냐 " + isPopularButton);
+			// PopularList.setBounds(500, 400, 200, 30);
+			// PopularList.setEditable(false);
+			// PopularList.addActionListener(this);
+			// PopularList.addItemListener(this);
+
+			add(pbtn[0]);
+			add(pbtn[1]);
+			add(pbtn[2]);
+			// add(PopularList);
+			count = 1;
+			// PopularList.setVisible(true);
 
 		}
 
@@ -650,17 +799,17 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 		add(BackButton);
 	}
 
-//	public void LoginVerified() {
-//		if (isLoginVerified) {
-//			////////////////// 여기서 for문돌려서 id랑 pass 맞는지 검사해야함
-//			////////////////// ///////////////////
-//
-//			////////////////// /////////////////////////
-//			VerifiedImage.setBounds(390, 240, 484, 47);
-//			add(VerifiedImage);
-//
-//		}
-//	}
+	// public void LoginVerified() {
+	// if (isLoginVerified) {
+	// ////////////////// 여기서 for문돌려서 id랑 pass 맞는지 검사해야함
+	// ////////////////// ///////////////////
+	//
+	// ////////////////// /////////////////////////
+	// VerifiedImage.setBounds(390, 240, 484, 47);
+	// add(VerifiedImage);
+	//
+	// }
+	// }
 
 	public void MovieCalculate() {
 
@@ -739,6 +888,11 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 		isLoginVerified = false;
 		isBackButton = false;
 		isLoginScreen = false;
+		isPopularButton = false;
+		isCalculateButton = false;
+		isRegisterButton = false;
+		isRgstButton = false;
+		isNowButton = false;
 
 		VerifiedImage.setVisible(false);
 		TF.setOpaque(false);
@@ -757,7 +911,27 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 		Reg.setVisible(false);
 		Reg2.setVisible(false);
 		RgstButton.setVisible(false);
-		CalcList_2.setVisible(false);
+		if (CalcList_1 != null) {
+			CalcList_1.setVisible(false);
+			CalcList_2.setVisible(false);
+			CalcList_3.setVisible(false);
+			CalcList_4.setVisible(false);
+		}
+		if (pbtn[0] != null) {
+			pbtn[0].setVisible(false);
+			pbtn[1].setVisible(false);
+			pbtn[2].setVisible(false);
+		}
+		if(btn!=null)
+		{
+			for (int i = 0; i < leng* 4; i++) {
+				btn[i].setVisible(false);
+				System.out.println("btn"+i+"안보임");
+			}
+		}
+
+		count = 0;
+
 	}
 
 	public void Register() {
@@ -769,8 +943,7 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 		Reg2.setVisible(true);
 		Reg.setOpaque(true);
 		Reg2.setOpaque(true);
-		
-		
+
 		CalcList_2.addItem("BC");
 		CalcList_2.addItem("신한");
 		CalcList_2.addItem("대구");
@@ -791,16 +964,15 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 		add(RgstButton);
 		add(BackButton);
 		System.out.println("Register 호출");
-		
+
 	}
 
 	public void Rgst() {
-		rgCount=0;
+		rgCount = 0;
 		String id = Reg.getText();
 		String pw = String.valueOf(Reg2.getPassword());
 		String value = CalcList_2.getSelectedItem().toString();
-		if(connection.register(id, pw, value)==true)
-		{
+		if (connection.register(id, pw, value) == true) {
 			// 등록이 완료되었으면
 			////////////////////////////////////
 			background = new ImageIcon(Main.class.getResource("/Images/MainImage_02.png")).getImage();
@@ -814,22 +986,20 @@ public class DynamicBeat extends JFrame implements ItemListener, ActionListener 
 			RegisterButton.setVisible(true);
 			NowButton.setVisible(true);
 			PopularityButton.setVisible(true);
-			
+
 			System.out.println("회원가입성공");
 			isBackButton = true;
-		}
-		else
-		{
+		} else {
 			System.out.println("회원가입실패");
 		}
-	
+
 		VerifiedImage.setBounds(390, 240, 484, 47);
 		add(VerifiedImage);
 		this.revalidate();
 		this.repaint();
 		/////////////// 여기서 등록에 대한 값 연결해야함 //////
 		// if 등록이 완료됬다면 완료되었다 아니면 아니다 표시 이건 나중에
-		
+
 	}
 
 	@Override
